@@ -6,7 +6,7 @@ from .serializer import TokensSerializer
 from .models import Tokens
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
-
+from django.core.exceptions import ObjectDoesNotExist
 import secrets
  
 @api_view(['POST'])
@@ -99,8 +99,8 @@ def keep_alive_token(request,token=None):
                 if token_serializer.is_valid(raise_exception=True):
                     savetoken = token_serializer.save()
                     return JsonResponse({ 'status' : 0,'token' : savetoken.token,'Message':message }, status=200)
-    except Exception as e:
-        return JsonResponse( { 'status' : 0,'message' : e }, status=status.HTTP_404_NOT_FOUND)
+    except ObjectDoesNotExist:
+        return JsonResponse( { 'status' : 0,'message' : 'Token is not alive' }, status=status.HTTP_404_NOT_FOUND)
 
 
 
