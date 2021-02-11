@@ -16,7 +16,7 @@ def generate_token(request):
         token_serializer = TokensSerializer(data = {'token':token } )
         if token_serializer.is_valid():
             token_serializer.save()
-            return JsonResponse({ 'status' : 0 , 'token':token }, status=status.HTTP_201_CREATED)
+            return JsonResponse({ 'status' : 0 , 'token':token, 'Message':'Token Created' }, status=status.HTTP_201_CREATED)
         return JsonResponse(token_serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 
@@ -25,9 +25,9 @@ def generate_token(request):
 def delete_token(request, token=None):
         try:
             if request.method == 'DELETE':
-                token = get_object_or_404(Tokens.objects.all() ,token=token)
-                token.delete()   
-                return JsonResponse({ 'status' : 0,'message' : 'Deleted!!' }, status=200)
+                token_obj = get_object_or_404(Tokens.objects.all() ,token=token)
+                token_obj.delete()   
+                return JsonResponse({ 'status' : 0,'message' : 'Deleted!!','token':token }, status=200)
         except Exception as e:
             return JsonResponse( { 'status' : 0,'message' : 'Not Found!!' }, status=status.HTTP_404_NOT_FOUND) 
 
@@ -48,7 +48,7 @@ def assign_token(request):
                 token_serializer = TokensSerializer(instance =token , data=data)
                 if token_serializer.is_valid(raise_exception=True):
                     savetoken = token_serializer.save()
-                    return JsonResponse({ 'status' : 0,'token' : savetoken.token }, status=200)
+                    return JsonResponse({ 'status' : 0,'token' : savetoken.token,'Message':'Token Assigned' }, status=200)
             else:
                 return JsonResponse(token_serializer.errors, status=status.HTTP_404_NOT_FOUND) 
     except Exception as e:
