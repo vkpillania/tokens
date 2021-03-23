@@ -1,4 +1,4 @@
-#tokens
+# Django Rest Framework tokens generation API  
 1. Endpoint to generate unique token in the pool.
 
 2. Endpoint to assign unique token. On hitting this endpoint, server should assign available random token from the pool and should not serve the same token again until it's freed or unblocked. If no free token is available in pool, it should serve 404.
